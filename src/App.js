@@ -1,6 +1,6 @@
 import React from 'react';
-import { Icon, Table } from 'semantic-ui-react'
-import { getUsers } from './api';
+import { Grid, Table, Header } from 'semantic-ui-react'
+import { getUsers, getCoffees } from './api';
 
 const TableExampleCelledStriped = (props) => (
   <Table celled striped>
@@ -14,17 +14,21 @@ const TableExampleCelledStriped = (props) => (
     </Table.Header>
 
     <Table.Body>
-      <TableBody users={props.users}/>
+      <TableBody users={props.users} coffees={props.coffees}/>
     </Table.Body>
   </Table>
 )
 
 function TableBody(props) {
-  return props.users.map(u => {
+  return props.users.map((u, c) => {
     const rowKey = `${u.name}`;
     return (
       <Table.Row key={rowKey}>
-        <Table.Cell >{u.name}</Table.Cell>
+        <Table.Cell >
+          <Header.Content>{u.name}</Header.Content>
+          <Header.Subheader>Human Resources</Header.Subheader>
+          <Header.Subheader>Human Resources</Header.Subheader>
+        </Table.Cell>
       </Table.Row>
     )
   });
@@ -35,6 +39,7 @@ class App extends React.Component {
     super(props);
     this.state = {
       users: getUsers(),
+      coffees: getCoffees(),
     }
   }
 
@@ -42,6 +47,7 @@ class App extends React.Component {
     return (
       <TableExampleCelledStriped
         users={this.state.users}
+        coffees={this.state.coffees}
       />
     );
   }
