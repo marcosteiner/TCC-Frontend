@@ -1,6 +1,5 @@
 import React from 'react';
 import { Icon, Table } from 'semantic-ui-react'
-import './App.css';
 import { getUsers } from './api';
 
 const TableExampleCelledStriped = (props) => (
