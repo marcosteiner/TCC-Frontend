@@ -12,8 +12,13 @@ class Coffee{
     }
 }
 
-function userFactory(){
-
+function userFactory(users){
+    let result = [];
+    for (let index in users){
+        let u = users[index];
+        result.push(new User(u.name, []));
+    }
+    return result;
 }
 
 function consumptionDataInitializer(coffees){
