@@ -1,10 +1,10 @@
 import React from 'react';
-import { Grid, Table, Header } from 'semantic-ui-react'
-import { getUsers, getCoffees } from './api';
+import { Grid, Table, Header } from 'semantic-ui-react';
+import {getUserData} from './converter';
 
 const TableExampleCelledStriped = (props) => (
   <Grid celled='internally'>
-    <GridBody users={props.users} coffees={props.coffees}/>
+    <GridBody users={props.users}/>
   </Grid>
 )
 
@@ -13,7 +13,7 @@ const GridBody = (props) => {
     return (
       <Grid.Row>
         <Grid.Column>
-          <Element user={u.name} coffees={props.coffees}/>
+          <Element username={u.name} consumptionData={u.consumptionData}/>
         </Grid.Column>
     </Grid.Row>
     )
@@ -24,22 +24,22 @@ const Element = (props) => (
   <Table celled>
     <Table.Header>
       <Table.Row>
-        <Table.HeaderCell colSpan='3'>{props.user}</Table.HeaderCell>
+        <Table.HeaderCell colSpan='3'>{props.username}</Table.HeaderCell>
       </Table.Row>
     </Table.Header>
 
     <Table.Body>
       <Table.Row>
-        <CoffeeData coffees={props.coffees}/>
+        <CoffeeData consumptionData={props.consumptionData}/>
       </Table.Row>
     </Table.Body>
   </Table>
 )
 
 const CoffeeData = (props) => {
-  return props.coffees.map(c => {
+  return props.consumptionData.map(c => {
     return (
-      <Table.Cell>{c.name}</Table.Cell>
+      <Table.Cell>{c.name} : {c.consumed}</Table.Cell>
     );
   })
 }
@@ -48,8 +48,7 @@ class App extends React.Component {
   constructor(props){
     super(props);
     this.state = {
-      users: getUsers(),
-      coffees: getCoffees(),
+      users: getUserData()
     }
   }
 
@@ -57,7 +56,6 @@ class App extends React.Component {
     return (
       <TableExampleCelledStriped
         users={this.state.users}
-        coffees={this.state.coffees}
       />
     );
   }

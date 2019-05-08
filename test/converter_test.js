@@ -89,7 +89,7 @@ describe('Test the userDataFactory', () => {
 
 describe('Test getUsers with API', () => {
     it('return userData', () => {
-        let result = converter.getUsers();
+        let result = converter.getUserData();
         expect(result).to.deep.equal(finalizedData)
     });     
 });

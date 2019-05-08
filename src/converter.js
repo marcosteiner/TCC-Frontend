@@ -60,7 +60,7 @@ function consumptionDataFactory(coffees, userConsumptionData){
     return result;
 }
 
-function getUsers(){
+function getUserData(){
     let users = api.getUsers();
     let coffees = api.getCoffees();
     let consumptionData = api.getConsumptionData();
@@ -73,5 +73,5 @@ module.exports = {
     consumptionDataFactory: consumptionDataFactory,
     consumptionDataInitializer: consumptionDataInitializer,
     filterConsumptionDataByUser: filterConsumptionDataByUser,
-    getUsers: getUsers
+    getUserData: getUserData
 };
