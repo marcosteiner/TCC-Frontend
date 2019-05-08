@@ -25,8 +25,22 @@ function consumptionDataInitializer(coffees){
     return result;
 }
 
-function consumptionDataFactory(coffees, data){
+function consumptionDataFactory(coffees, userConsumptionData){
+    let result = [];
+    let rawConsumptionData = consumptionDataInitializer(coffees);
 
+    for (let index in rawConsumptionData){
+        let c = new Coffee(rawConsumptionData[index].name, rawConsumptionData[index].consumed)
+        result.push(c);
+
+        for(let indexUserData in userConsumptionData){
+            let data = userConsumptionData[indexUserData];
+            if(result[index].name === data.coffee_name){
+                result[index].consumed = data.coffee_count;
+            }
+        }
+    }
+    return result;
 }
 
 module.exports = {
