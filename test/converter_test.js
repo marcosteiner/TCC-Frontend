@@ -19,21 +19,67 @@ describe('Test the consumptionDataInitializer and consumptionDataFactory', () =>
     });  
 });
 
+describe('Test the filterConsumptionDataByUser function', () => {
+    it('returns an array of consumption data only belonging to one user', () => {
+        let result = converter.filterConsumptionDataByUser({"name": "Marco"}, cData);
+        expect(result).to.deep.equal(userConsumptionData)
+    });     
+});
+
 describe('Test the userDataFactory', () => {
     it('returns an array of user objects', () => {
-        let result = converter.userFactory(users);
+        let result = converter.userFactory(users, cData, coffees);
         expect(result).to.deep.equal([
             {
                 "name": "Marco",
-                "consumptionData": []
+                "consumptionData": [
+                    {
+                        "consumed": 2,
+                        "name": "Espresso"
+                    },
+                    {
+                        "consumed": 27,
+                        "name": "Milchkaffee"
+                    },
+                    {
+                        "consumed": 0,
+                        "name": "Schale"
+                    }
+                ]
             },
             {
                 "name": "Nicola",
-                "consumptionData": []
+                "consumptionData": [
+                    {
+                        "consumed": 0,
+                        "name": "Espresso"
+                    },
+                    {
+                        "consumed": 0,
+                        "name": "Milchkaffee"
+                    },
+                    {
+                        "consumed": 0,
+                        "name": "Schale"
+                    }
+                ]
             },
             {
                 "name": "Pascal",
-                "consumptionData": []
+                "consumptionData": [
+                    {
+                        "consumed": 0,
+                        "name": "Espresso"
+                    },
+                    {
+                        "consumed": 27,
+                        "name": "Milchkaffee"
+                    },
+                    {
+                        "consumed": 0,
+                        "name": "Schale"
+                    }
+                ]
             }
         ]);
     });     

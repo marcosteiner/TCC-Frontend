@@ -12,11 +12,21 @@ class Coffee{
     }
 }
 
-function userFactory(users){
+function filterConsumptionDataByUser(user, consumptionData){
+    let checkUser = (data) => {
+        return data.person_name === user.name;
+    };
+
+    return consumptionData.filter(checkUser);
+}
+
+function userFactory(users, consumptionData, coffees){
     let result = [];
     for (let index in users){
         let u = users[index];
-        result.push(new User(u.name, []));
+        let userConsumptionData = filterConsumptionDataByUser(u, consumptionData);
+        let resultData = consumptionDataFactory(coffees, userConsumptionData);
+        result.push(new User(u.name, resultData));
     }
     return result;
 }
@@ -51,5 +61,6 @@ function consumptionDataFactory(coffees, userConsumptionData){
 module.exports = {
     userFactory: userFactory,
     consumptionDataFactory: consumptionDataFactory,
-    consumptionDataInitializer: consumptionDataInitializer
+    consumptionDataInitializer: consumptionDataInitializer,
+    filterConsumptionDataByUser: filterConsumptionDataByUser
 };
