@@ -16,11 +16,21 @@ function userFactory(){
 
 }
 
-function consumptionDataFactory(){
-    return [{"name":"Espresso","consumed":0},{"name":"Milchkaffee","consumed":0},{"name":"Schale","consumed":0}];
+function consumptionDataInitializer(coffees){
+    let result = [];
+    for (let index in coffees){
+        let c = coffees[index];
+        result.push(new Coffee(c.name, 0));
+    }
+    return result;
+}
+
+function consumptionDataFactory(coffees, data){
+
 }
 
 module.exports = {
     userFactory: userFactory,
-    consumptionDataFactory: consumptionDataFactory
+    consumptionDataFactory: consumptionDataFactory,
+    consumptionDataInitializer: consumptionDataInitializer
 };
