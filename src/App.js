@@ -3,35 +3,45 @@ import { Grid, Table, Header } from 'semantic-ui-react'
 import { getUsers, getCoffees } from './api';
 
 const TableExampleCelledStriped = (props) => (
-  <Table celled striped>
+  <Grid celled='internally'>
+    <GridBody users={props.users} coffees={props.coffees}/>
+  </Grid>
+)
+
+const GridBody = (props) => {
+  return props.users.map(u => {
+    return (
+      <Grid.Row>
+        <Grid.Column>
+          <Element user={u.name} coffees={props.coffees}/>
+        </Grid.Column>
+    </Grid.Row>
+    )
+  });
+}
+
+const Element = (props) => (
+  <Table celled>
     <Table.Header>
       <Table.Row>
-        <Table.HeaderCell >The Coffee Counter (TCC)</Table.HeaderCell>
-      </Table.Row>
-      <Table.Row>
-        <Table.HeaderCell >Total: 7 Coffees</Table.HeaderCell>
+        <Table.HeaderCell colSpan='3'>{props.user}</Table.HeaderCell>
       </Table.Row>
     </Table.Header>
 
     <Table.Body>
-      <TableBody users={props.users} coffees={props.coffees}/>
+      <Table.Row>
+        <CoffeeData coffees={props.coffees}/>
+      </Table.Row>
     </Table.Body>
   </Table>
 )
 
-function TableBody(props) {
-  return props.users.map((u, c) => {
-    const rowKey = `${u.name}`;
+const CoffeeData = (props) => {
+  return props.coffees.map(c => {
     return (
-      <Table.Row key={rowKey}>
-        <Table.Cell >
-          <Header.Content>{u.name}</Header.Content>
-          <Header.Subheader>Human Resources</Header.Subheader>
-          <Header.Subheader>Human Resources</Header.Subheader>
-        </Table.Cell>
-      </Table.Row>
-    )
-  });
+      <Table.Cell>{c.name}</Table.Cell>
+    );
+  })
 }
 
 class App extends React.Component {
