@@ -1,3 +1,5 @@
+let api = require("../src/api.js")
+
 class User{
     constructor(name, consumptionData){
         this.name = name;
@@ -58,9 +60,18 @@ function consumptionDataFactory(coffees, userConsumptionData){
     return result;
 }
 
+function getUsers(){
+    let users = api.getUsers();
+    let coffees = api.getCoffees();
+    let consumptionData = api.getConsumptionData();
+
+    return userFactory(users, consumptionData, coffees);
+}
+
 module.exports = {
     userFactory: userFactory,
     consumptionDataFactory: consumptionDataFactory,
     consumptionDataInitializer: consumptionDataInitializer,
-    filterConsumptionDataByUser: filterConsumptionDataByUser
+    filterConsumptionDataByUser: filterConsumptionDataByUser,
+    getUsers: getUsers
 };
