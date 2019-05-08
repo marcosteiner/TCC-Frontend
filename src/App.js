@@ -35,9 +35,15 @@ const TotalCount = (props) => {
 const coffeeSum = (users) => {
   let sum = 0;
   for (let user of users){
-    for(let coffee of user.consumptionData){
-      sum += coffee.consumed;
-    }
+    sum += individualCoffeeSum(user)
+  }
+  return sum;
+}
+
+const individualCoffeeSum = (user) => {
+  let sum = 0;
+  for(let coffee of user.consumptionData){
+    sum += coffee.consumed;
   }
   return sum;
 }
@@ -47,7 +53,7 @@ const GridBody = (props) => {
     return (
       <Grid.Row>
         <Grid.Column>
-          <Element username={u.name} consumptionData={u.consumptionData}/>
+          <Element username={u.name} consumptionData={u.consumptionData} coffeeCount={individualCoffeeSum(u)}/>
         </Grid.Column>
     </Grid.Row>
     )
@@ -58,7 +64,16 @@ const Element = (props) => (
   <Table celled>
     <Table.Header>
       <Table.Row>
-        <Table.HeaderCell colSpan='3'>{props.username}</Table.HeaderCell>
+        <Table.HeaderCell colSpan='2'>
+        {props.username}
+        &nbsp;
+        &nbsp;
+        &nbsp;
+        <Button icon>
+          <Icon name='trash alternate' />
+        </Button>
+        </Table.HeaderCell>
+        <Table.HeaderCell colSpan='1'>{props.coffeeCount} Coffees</Table.HeaderCell>
       </Table.Row>
     </Table.Header>
 
