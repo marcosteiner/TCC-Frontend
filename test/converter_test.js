@@ -59,6 +59,23 @@ const finalizedData = [
                             ]
                         }
                     ];
+ const newUser = {
+                    "name": "Janine",
+                    "consumptionData": [
+                        {
+                            "consumed": 0,
+                            "name": "Espresso"
+                        },
+                        {
+                            "consumed": 0,
+                            "name": "Milchkaffee"
+                        },
+                        {
+                            "consumed": 0,
+                            "name": "Schale"
+                        }
+                    ]
+                }   
 
 
 describe('Test the consumptionDataInitializer and consumptionDataFactory', () => {
@@ -91,5 +108,12 @@ describe('Test getUsers with API', () => {
     it('return userData', () => {
         let result = converter.getUserData();
         expect(result).to.deep.equal(finalizedData)
+    });     
+});
+
+describe('Test createUser', () => {
+    it('return a new user', () => {
+        let result = converter.createUser("Janine");
+        expect(result).to.deep.equal(newUser);
     });     
 });

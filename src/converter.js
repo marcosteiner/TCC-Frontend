@@ -68,10 +68,18 @@ function getUserData(){
     return userFactory(users, consumptionData, coffees);
 }
 
+function createUser(name){
+    let coffees = api.getCoffees();
+    let consumptionData = consumptionDataInitializer(coffees);
+    let user = new User(name, consumptionData);
+    return user
+}
+
 module.exports = {
     userFactory: userFactory,
     consumptionDataFactory: consumptionDataFactory,
     consumptionDataInitializer: consumptionDataInitializer,
     filterConsumptionDataByUser: filterConsumptionDataByUser,
-    getUserData: getUserData
+    getUserData: getUserData,
+    createUser: createUser
 };
