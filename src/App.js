@@ -8,8 +8,8 @@ const Container = (props) => (
     <TotalCount users={props.users}/>
     <GridBody 
       users={props.users} 
-      onDelete={(name) => props.onDelete(name)}
-      onIncrease={() => props.onIncrease()}
+      onDelete={(index) => props.onDelete(index)}
+      onIncrease={(indexOfUser, indexOfCoffee) => props.onIncrease(indexOfUser, indexOfCoffee)}
     />
     <GridFoot onAdd={() => props.onAdd()}/>
   </Grid>
@@ -54,18 +54,21 @@ const individualCoffeeSum = (user) => {
 }
 
 const GridBody = (props) => {
+  let userIndex = -1;
   return props.users.map(u => {
     let coffeeCount = individualCoffeeSum(u)
     let rowKey = `${u.name}-${coffeeCount}`
+    userIndex++;
     return (
       <Grid.Row key={rowKey}>
         <Grid.Column>
           <Element 
             username={u.name} 
+            userIndex={userIndex}
             consumptionData={u.consumptionData} 
             coffeeCount={coffeeCount} 
-            onDelete={(name) => props.onDelete(name)}
-            onIncrease={() => props.onIncrease()}
+            onDelete={(index) => props.onDelete(index)}
+            onIncrease={(indexOfUser, indexOfCoffee) => props.onIncrease(indexOfUser, indexOfCoffee)}
           />
         </Grid.Column>
     </Grid.Row>
@@ -83,7 +86,7 @@ const Element = (props) => {
           &nbsp;
           &nbsp;
           &nbsp;
-          <Button icon onClick={() => props.onDelete(props.username)}>
+          <Button icon onClick={() => props.onDelete(props.userIndex)}>
             <Icon name='trash alternate' />
           </Button>
           </Table.HeaderCell>
@@ -95,7 +98,8 @@ const Element = (props) => {
         <Table.Row>
           <CoffeeData 
             consumptionData={props.consumptionData}
-            onIncrease={() => props.onIncrease()}
+            onIncrease={(indexOfUser, indexOfCoffee) => props.onIncrease(indexOfUser, indexOfCoffee)}
+            userIndex={props.userIndex}
           />
         </Table.Row>
       </Table.Body>
@@ -129,17 +133,33 @@ const GridFoot = (props) => {
 }
 
 const CoffeeData = (props) => {
+  let coffeeIndex = -1;
   return props.consumptionData.map(c => {
     let cellKey = `${c.name}-${c.consumed}`
+    coffeeIndex++;
     return (
-      <Table.Cell key={cellKey}>
-        <Button basic icon labelPosition='right' color='blue' onClick={props.onIncrease}>
-          {c.name} : {c.consumed}
-          <Icon name='plus circle' />
-        </Button>
-      </Table.Cell>
+      <RenderCoffeeData
+        cellKey={cellKey}
+        name={c.name}
+        consumed={c.consumed}
+        coffeeIndex={coffeeIndex}
+        onIncrease={(indexOfUser, indexOfCoffee) => props.onIncrease(indexOfUser, indexOfCoffee)}
+        userIndex={props.userIndex}
+      />
     );
   })
+}
+
+const RenderCoffeeData = (props) =>{
+  //Needed because of Lambda closure otherwise the index is always the maxvalue
+  return (
+    <Table.Cell key={props.cellKey}>
+      <Button basic icon labelPosition='right' color='blue' onClick={() => props.onIncrease(props.userIndex, props.coffeeIndex)}>
+        {props.name} : {props.consumed}
+        <Icon name='plus circle' />
+      </Button>
+    </Table.Cell>
+  );
 }
 
 class App extends React.Component {
@@ -175,12 +195,12 @@ class App extends React.Component {
     });
   }
 
-  onDelete(name){
-    alert("deleted " + name);
+  onDelete(index){
+    alert("deleted " + index);
   }
 
-  onIncrease(){
-    alert("incrased ");
+  onIncrease(indexOfUser, indexOfCoffee){
+    alert("incrased coffee " + indexOfCoffee + "increasedUser " + indexOfUser);
   }
 
   onAdd(){
@@ -191,8 +211,8 @@ class App extends React.Component {
     return (
       <Container
         users={this.state.users}
-        onDelete={(name) => this.onDelete(name)}
-        onIncrease={() => this.onIncrease()}
+        onDelete={(index) => this.onDelete(index)}
+        onIncrease={(indexOfUser, indexOfCoffee) => this.onIncrease(indexOfUser, indexOfCoffee)}
         onAdd={() => this.onAdd()}
       />
     );
