@@ -51,13 +51,15 @@ const individualCoffeeSum = (user) => {
 
 const GridBody = (props) => {
   return props.users.map(u => {
+    let coffeeCount = individualCoffeeSum(u)
+    let rowKey = `${u.name}-${coffeeCount}`
     return (
-      <Grid.Row>
+      <Grid.Row key={rowKey}>
         <Grid.Column>
           <Element 
             username={u.name} 
             consumptionData={u.consumptionData} 
-            coffeeCount={individualCoffeeSum(u)} 
+            coffeeCount={coffeeCount} 
             onDelete={(name) => props.onDelete(name)}
           />
         </Grid.Column>
@@ -66,30 +68,32 @@ const GridBody = (props) => {
   });
 }
 
-const Element = (props) => (
-  <Table celled>
-    <Table.Header>
-      <Table.Row>
-        <Table.HeaderCell colSpan='2'>
-        {props.username}
-        &nbsp;
-        &nbsp;
-        &nbsp;
-        <Button icon onClick={() => props.onDelete(props.username)}>
-          <Icon name='trash alternate' />
-        </Button>
-        </Table.HeaderCell>
-        <Table.HeaderCell colSpan='1'>{props.coffeeCount} Coffees</Table.HeaderCell>
-      </Table.Row>
-    </Table.Header>
+const Element = (props) => {
+  return (
+    <Table celled>
+      <Table.Header>
+        <Table.Row key={props.coffeeCount}>
+          <Table.HeaderCell colSpan='2'>
+          {props.username}
+          &nbsp;
+          &nbsp;
+          &nbsp;
+          <Button icon onClick={() => props.onDelete(props.username)}>
+            <Icon name='trash alternate' />
+          </Button>
+          </Table.HeaderCell>
+          <Table.HeaderCell colSpan='1'>{props.coffeeCount} Coffees</Table.HeaderCell>
+        </Table.Row>
+      </Table.Header>
 
-    <Table.Body>
-      <Table.Row>
-        <CoffeeData consumptionData={props.consumptionData}/>
-      </Table.Row>
-    </Table.Body>
-  </Table>
-)
+      <Table.Body>
+        <Table.Row>
+          <CoffeeData consumptionData={props.consumptionData}/>
+        </Table.Row>
+      </Table.Body>
+    </Table>
+  )
+}
 
 const AddUser = () => (
   <Input
@@ -113,8 +117,9 @@ const GridFoot = () => {
 
 const CoffeeData = (props) => {
   return props.consumptionData.map(c => {
+    let cellKey = `${c.name}-${c.consumed}`
     return (
-      <Table.Cell>
+      <Table.Cell key={cellKey}>
         <Button basic icon labelPosition='right' color='blue'>
           {c.name} : {c.consumed}
           <Icon name='plus circle' />
