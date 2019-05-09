@@ -183,20 +183,13 @@ class App extends React.Component {
 
   }
 
-  removeUser(name){
-    let comparator = (user) => {
-      return user.name !== name;
-    }
-
-    let updatedUsers = this.state.users.filter(comparator);
+  onDelete(index){
+    const users = this.state.users.slice();
+    users.splice(index, 1);
 
     this.setState({
-      users: updatedUsers
+      users: users
     });
-  }
-
-  onDelete(index){
-    alert("deleted " + index);
   }
 
   onIncrease(indexOfUser, indexOfCoffee){
