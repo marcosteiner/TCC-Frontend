@@ -1,6 +1,7 @@
 import React from 'react';
 import { Grid, Table, Button, Icon, Header, Input } from 'semantic-ui-react';
 import {getUserData, createUser} from './converter';
+import {getAsyncUsers} from './api';
 
 const Container = (props) => (
   <Grid celled='internally'>
@@ -190,9 +191,17 @@ const RenderCoffeeData = (props) =>{
 class App extends React.Component {
   constructor(props){
     super(props);
+    //getAsyncUsers(this.setUserData)
     this.state = {
       users: this.sortUserData(getUserData())
     }
+  }
+
+  setUserData(users){
+    
+    this.setState({
+      users: this.sortUserData(users)
+    })
   }
 
   sortUserData(users) {
