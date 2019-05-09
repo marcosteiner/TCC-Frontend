@@ -123,8 +123,21 @@ class App extends React.Component {
   constructor(props){
     super(props);
     this.state = {
-      users: getUserData()
+      users: this.sortUserData(getUserData())
     }
+  }
+
+  sortUserData(users) {
+    let comparator = (userA, userB) => {
+      let sum = individualCoffeeSum(userB) - individualCoffeeSum(userA);
+      if(sum === 0){
+        return ( ( userA.name === userB.name ) ? 0 : ( ( userA.name > userB.name ) ? 1 : -1 ) );
+      }
+      return sum;
+    }
+
+    return users.sort(comparator);
+
   }
 
   render() {
