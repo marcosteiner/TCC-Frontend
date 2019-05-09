@@ -1,5 +1,5 @@
 import React from 'react';
-import { Grid, Table, Button, Icon, Header } from 'semantic-ui-react';
+import { Grid, Table, Button, Icon, Header, Input } from 'semantic-ui-react';
 import {getUserData} from './converter';
 
 const TableExampleCelledStriped = (props) => (
@@ -7,6 +7,7 @@ const TableExampleCelledStriped = (props) => (
     <GridHead/>
     <TotalCount users={props.users}/>
     <GridBody users={props.users}/>
+    <GridFoot/>
   </Grid>
 )
 
@@ -84,6 +85,26 @@ const Element = (props) => (
     </Table.Body>
   </Table>
 )
+
+const AddUser = () => (
+  <Input
+    icon='user'
+    iconPosition='left'
+    label={{ tag: true, content: 'Add User' }}
+    labelPosition='right'
+    placeholder='Enter Username'
+  />
+)
+
+const GridFoot = () => {
+  return (
+    <Grid.Row>
+      <Grid.Column>
+        <AddUser/>
+      </Grid.Column>
+    </Grid.Row>
+  );
+}
 
 const CoffeeData = (props) => {
   return props.consumptionData.map(c => {
