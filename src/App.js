@@ -6,7 +6,7 @@ const TableExampleCelledStriped = (props) => (
   <Grid celled='internally'>
     <GridHead/>
     <TotalCount users={props.users}/>
-    <GridBody users={props.users}/>
+    <GridBody users={props.users} onDelete={(name) => props.onDelete(name)}/>
     <GridFoot/>
   </Grid>
 )
@@ -54,7 +54,12 @@ const GridBody = (props) => {
     return (
       <Grid.Row>
         <Grid.Column>
-          <Element username={u.name} consumptionData={u.consumptionData} coffeeCount={individualCoffeeSum(u)}/>
+          <Element 
+            username={u.name} 
+            consumptionData={u.consumptionData} 
+            coffeeCount={individualCoffeeSum(u)} 
+            onDelete={(name) => props.onDelete(name)}
+          />
         </Grid.Column>
     </Grid.Row>
     )
@@ -70,7 +75,7 @@ const Element = (props) => (
         &nbsp;
         &nbsp;
         &nbsp;
-        <Button icon>
+        <Button icon onClick={() => props.onDelete(props.username)}>
           <Icon name='trash alternate' />
         </Button>
         </Table.HeaderCell>
@@ -140,10 +145,27 @@ class App extends React.Component {
 
   }
 
+  removeUser(name){
+    let comparator = (user) => {
+      return user.name !== name;
+    }
+
+    let updatedUsers = this.state.users.filter(comparator);
+
+    this.setState({
+      users: updatedUsers
+    });
+  }
+
+  onDelete(name){
+    alert("deleted " + name);
+  }
+
   render() {
     return (
       <TableExampleCelledStriped
         users={this.state.users}
+        onDelete={(name) => this.onDelete(name)}
       />
     );
   }
