@@ -1,6 +1,6 @@
 import React from 'react';
 import { Grid, Table, Button, Icon, Header, Input } from 'semantic-ui-react';
-import {getUserData} from './converter';
+import {getUserData, createUser} from './converter';
 
 const Container = (props) => (
   <Grid celled='internally'>
@@ -11,7 +11,7 @@ const Container = (props) => (
       onDelete={(index) => props.onDelete(index)}
       onIncrease={(indexOfUser, indexOfCoffee) => props.onIncrease(indexOfUser, indexOfCoffee)}
     />
-    <GridFoot onAdd={() => props.onAdd()}/>
+    <GridFoot onAdd={(username) => props.onAdd(username)}/>
   </Grid>
 )
 
@@ -107,26 +107,51 @@ const Element = (props) => {
   )
 }
 
-const AddUser = (props) => (
-  <div>
-      <Input
-      icon='user'
-      iconPosition='left'
-      placeholder='Enter Username'
-    />
-    <Button basic icon labelPosition='right' color='red' onClick={props.onAdd}>
-      Add User
-      <Icon name='plus circle' />
-    </Button>
-  </div>
+class AddUser extends React.Component {
+  constructor(props){
+    super(props);
+    this.props = props;
+    this.state = {
+      username: ""
+    };
+  }
+
+  handleChange(event){
+    this.setState({
+      username: event.target.value
+    })
+  }
+
+  render(){ 
+    return (
+      <div class="ui massive icon input">
+          <Input
+          icon='user'
+          iconPosition='left'
+          placeholder='Enter Username'
+          onChange={(e) => this.handleChange(e)} 
+        />
+        <Button 
+        basic 
+        icon 
+        labelPosition='right' 
+        color='red' 
+        onClick={() => {this.props.onAdd(this.state.username)}}>
+          Add User
+          <Icon name='plus circle' />
+        </Button>
+      </div>
   
-)
+    )
+  }
+}
+
 
 const GridFoot = (props) => {
   return (
     <Grid.Row>
       <Grid.Column>
-        <AddUser onAdd={() => props.onAdd()}/>
+        <AddUser onAdd={(username) => props.onAdd(username)}/>
       </Grid.Column>
     </Grid.Row>
   );
@@ -184,7 +209,7 @@ class App extends React.Component {
   }
 
   onDelete(index){
-    const users = this.state.users.slice();
+    let users = this.state.users.slice();
     users.splice(index, 1);
 
     this.setState({
@@ -193,11 +218,33 @@ class App extends React.Component {
   }
 
   onIncrease(indexOfUser, indexOfCoffee){
-    alert("incrased coffee " + indexOfCoffee + "increasedUser " + indexOfUser);
+    let users = this.state.users.slice();
+    let user = users[indexOfUser];
+    user.consumptionData[indexOfCoffee].consumed++;
+
+    this.setState({
+      users: users
+    });
   }
 
-  onAdd(){
-    alert("added ");
+  onAdd(username){
+    if(username.length < 2){
+      alert("Username too short");
+      return;
+    }
+    let startCharacter = username.charAt(0);
+    if(startCharacter !== startCharacter.toUpperCase()){
+      alert("Username must start with capital letter");
+      return;
+    }
+
+    let users = this.state.users.slice();
+    let newUser = createUser(username);
+    users.push(newUser);
+    let userResultSet = this.sortUserData(users);
+    this.setState({
+      users: userResultSet
+    })
   }
 
   render() {
@@ -206,7 +253,7 @@ class App extends React.Component {
         users={this.state.users}
         onDelete={(index) => this.onDelete(index)}
         onIncrease={(indexOfUser, indexOfCoffee) => this.onIncrease(indexOfUser, indexOfCoffee)}
-        onAdd={() => this.onAdd()}
+        onAdd={(username) => this.onAdd(username)}
       />
     );
   }
