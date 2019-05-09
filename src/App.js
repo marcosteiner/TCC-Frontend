@@ -2,12 +2,16 @@ import React from 'react';
 import { Grid, Table, Button, Icon, Header, Input } from 'semantic-ui-react';
 import {getUserData} from './converter';
 
-const TableExampleCelledStriped = (props) => (
+const Container = (props) => (
   <Grid celled='internally'>
     <GridHead/>
     <TotalCount users={props.users}/>
-    <GridBody users={props.users} onDelete={(name) => props.onDelete(name)}/>
-    <GridFoot/>
+    <GridBody 
+      users={props.users} 
+      onDelete={(name) => props.onDelete(name)}
+      onIncrease={() => props.onIncrease()}
+    />
+    <GridFoot onAdd={() => props.onAdd()}/>
   </Grid>
 )
 
@@ -61,6 +65,7 @@ const GridBody = (props) => {
             consumptionData={u.consumptionData} 
             coffeeCount={coffeeCount} 
             onDelete={(name) => props.onDelete(name)}
+            onIncrease={() => props.onIncrease()}
           />
         </Grid.Column>
     </Grid.Row>
@@ -88,28 +93,36 @@ const Element = (props) => {
 
       <Table.Body>
         <Table.Row>
-          <CoffeeData consumptionData={props.consumptionData}/>
+          <CoffeeData 
+            consumptionData={props.consumptionData}
+            onIncrease={() => props.onIncrease()}
+          />
         </Table.Row>
       </Table.Body>
     </Table>
   )
 }
 
-const AddUser = () => (
-  <Input
-    icon='user'
-    iconPosition='left'
-    label={{ tag: true, content: 'Add User' }}
-    labelPosition='right'
-    placeholder='Enter Username'
-  />
+const AddUser = (props) => (
+  <div>
+      <Input
+      icon='user'
+      iconPosition='left'
+      placeholder='Enter Username'
+    />
+    <Button basic icon labelPosition='right' color='red' onClick={props.onAdd}>
+      Add User
+      <Icon name='plus circle' />
+    </Button>
+  </div>
+  
 )
 
-const GridFoot = () => {
+const GridFoot = (props) => {
   return (
     <Grid.Row>
       <Grid.Column>
-        <AddUser/>
+        <AddUser onAdd={() => props.onAdd()}/>
       </Grid.Column>
     </Grid.Row>
   );
@@ -120,7 +133,7 @@ const CoffeeData = (props) => {
     let cellKey = `${c.name}-${c.consumed}`
     return (
       <Table.Cell key={cellKey}>
-        <Button basic icon labelPosition='right' color='blue'>
+        <Button basic icon labelPosition='right' color='blue' onClick={props.onIncrease}>
           {c.name} : {c.consumed}
           <Icon name='plus circle' />
         </Button>
@@ -166,11 +179,21 @@ class App extends React.Component {
     alert("deleted " + name);
   }
 
+  onIncrease(){
+    alert("incrased ");
+  }
+
+  onAdd(){
+    alert("added ");
+  }
+
   render() {
     return (
-      <TableExampleCelledStriped
+      <Container
         users={this.state.users}
         onDelete={(name) => this.onDelete(name)}
+        onIncrease={() => this.onIncrease()}
+        onAdd={() => this.onAdd()}
       />
     );
   }
